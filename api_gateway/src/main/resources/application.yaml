@@ -1,0 +1,41 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # Ruta de prueba externa
+            - id: google_route
+              uri: https://www.google.com
+              predicates:
+                - Path=/google/**
+              filters:
+                - StripPrefix=1
+
+            # RUTA NUEVA: Apuntando a tu Microservicio de Usuarios
+            - id: service-users-route
+              uri: lb://service-users # "lb://" significa Load Balancer (usa el nombre de Eureka)
+              predicates:
+                - Path=/usuarios/**
+              filters:
+                - StripPrefix=1
+
+            - id: service-tasks-route
+              uri: lb://service-tasks
+              predicates:
+                - Path=/tareas/**
+              filters:
+                - StripPrefix=1
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

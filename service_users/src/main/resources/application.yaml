@@ -1,0 +1,32 @@
+server:
+  port: 8081 # Te sugiero 8081 para mantener el orden (9090 es Gateway, 8761 Eureka)
+
+spring:
+  application:
+    name: service-users
+  
+  datasource:
+    # Cambiamos 'mysql-db' por 'localhost' para que conecte con tu Workbench de Windows
+    url: jdbc:mysql://localhost:3306/db_users
+    username: root
+    password: 
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: update # Esto crea las tablas automáticamente basado en tu @Entity
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
