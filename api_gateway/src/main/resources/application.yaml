@@ -7,30 +7,25 @@ spring:
   cloud:
     gateway:
       server:
-        webflux:
+        webflux:  # 👈 NUEVA ESTRUCTURA
           routes:
-            # Ruta de prueba externa
-            - id: google_route
-              uri: https://www.google.com
-              predicates:
-                - Path=/google/**
-              filters:
-                - StripPrefix=1
-
-            # RUTA NUEVA: Apuntando a tu Microservicio de Usuarios
+            # RUTA para el microservicio de USUARIOS
             - id: service-users-route
-              uri: lb://service-users # "lb://" significa Load Balancer (usa el nombre de Eureka)
+              uri: lb://service-users
               predicates:
                 - Path=/usuarios/**
               filters:
                 - StripPrefix=1
+                - JwtValidationFilter
 
+            # RUTA para el microservicio de TAREAS
             - id: service-tasks-route
               uri: lb://service-tasks
               predicates:
                 - Path=/tareas/**
               filters:
                 - StripPrefix=1
+                - JwtValidationFilter
 
 eureka:
   client:

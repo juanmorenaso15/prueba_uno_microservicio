@@ -14,7 +14,7 @@ import com.prueba_ms.service_tasks.service.TaskService;
 
 @RestController
 @RequestMapping("/api/tasks")
-public class UserController { // Puedes llamarlo TaskController
+public class TaskController { // Puedes llamarlo TaskController
 
     @Autowired
     private TaskService taskService;
